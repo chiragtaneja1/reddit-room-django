@@ -1,0 +1,20 @@
+{# Hide on medium screen #}
+<div class="d-none d-md-block">
+    <h4>Recent Activities <i class="fa-regular fa-hourglass"></i></h4>
+    <hr>
+    {% for message in room_messages %}
+        <div class="card shadow mb-1">
+            <div class="card-body">
+                <div class="float-end">
+                    <small>{{ message.created|timesince  }}</small>
+                </div>
+                <small>
+                    <img src="{{ message.user.avatar.url }}" alt="logo" class="rounded-circle" style="width: 50px; height: 50px;">
+                    <a href="{% url 'profile_user' message.user.id %}" class="text-decoration-none">{{ message.user.username }}</a>
+                </small>
+            </div>
+            <small class="mx-4">In <a href="{% url 'room' message.room.id %}">{{ message.room }}</a></small>
+            <small class="mx-4">{{ message.body }} <i class="fa-solid fa-reply"></i></small>
+        </div>
+    {% endfor %}
+</div>
