@@ -1,1 +1,0 @@
-web: gunicorn redditroom.wsgi --log-file -
