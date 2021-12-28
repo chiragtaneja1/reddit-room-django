@@ -1,0 +1,9 @@
+{% autoescape off %}
+
+Hi {{ user.username }}, Welcome to Reddit-Room.
+
+Please click on the link below to verify your account.
+
+http://{{ domain }}{% url 'activate_user' uidb64=uid token=token %}
+
+{% endautoescape %}

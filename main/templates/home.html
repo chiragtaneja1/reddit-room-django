@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container-fluid px-3">
+        <div class="row">
+            <div class="col-md-3 mt-3">
+               {% include 'topics_component.html' %}
+            </div>
+    
+            <div class="col-md-6 mt-3">               
+                <form class="mb-3" action="" method="GET">  
+                    <div class="input-group">
+                        <input type="text" name="q" value="{{search_room}}" class="form-control" placeholder="Search Rooms ..." /> 
+                    </div>              
+                </form>                
+                <div class="mb-3">
+                    <h5>ROOMS <i class="fa-regular fa-lightbulb"></i><a href="{% url 'create_room' %}" class="btn btn-warning float-end">+ Create Room</a></h5>
+                    <small>{{ room_count }} Rooms available</small>
+                </div>   
+                {% include 'feed_component.html' %}
+            </div>
+            
+            <div class="col-md-3 mt-3">
+                {% include 'activity_component.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
