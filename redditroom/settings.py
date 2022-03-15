@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os 
+from decouple import config
 import dj_database_url
 import cloudinary
 import cloudinary_storage
@@ -24,10 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DEBUG', default=True, cast=bool)
+
 
 ALLOWED_HOSTS = ["*"]
 
@@ -40,11 +42,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Apps
     'main.apps.MainConfig',
     'users.apps.UsersConfig',
+
+    # Package
     'widget_tweaks',  
     'cloudinary',
     'cloudinary_storage',
+
+    # Rest Framework
     'rest_framework',
 ]
 
@@ -131,21 +139,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_ROOT =  BASE_DIR / 'staticfiles'
-STATIC_URL = '/static/'
+# STATIC_ROOT =  BASE_DIR / 'staticfiles'
+STATIC_URL  = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
-# MEDIA_ROOT = BASE_DIR / 'uploads'
-MEDIA_URL = '/uploads/'   
-
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
-    'API_KEY': os.environ.get('API_KEY'),
-    'API_SECRET': os.environ.get('API_SECRET'),
-}
+MEDIA_ROOT = BASE_DIR / 'uploads'
+MEDIA_URL  = 'uploads/'   
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
@@ -153,6 +155,8 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Custom User Model
 AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
@@ -191,10 +195,17 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+# Email Setup
+EMAIL_BACKEND       = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST          = config('EMAIL_HOST')
+EMAIL_USE_TLS       = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_PORT          = config('EMAIL_PORT', cast=int)
+EMAIL_HOST_USER     = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
+# Cloudinary Storage
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUD_NAME'),
+    'API_KEY'   : config('API_KEY'),
+    'API_SECRET': config('API_SECRET'),
+}
